@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load staticfiles %}
+<style>
+div.relative {
+  position : relative;
+  min-height : 120px;
+
+}
+div.absolute1 {
+  position : absolute;
+  top:2px;
+  right:0px;
+  width: 20%;
+  text-align :right;
+}
+div.absolute2 {
+  position : absolute;
+  margin-top :30px;
+  bottom : 5px;
+  right:0px;
+  width: 20%;
+  text-align :right;
+
+}
+div.absolute3 {
+  position : absolute;
+  margin-top :30px;
+  bottom : 25px;
+  right:35px;
+  width: 20%;
+  text-align :right;
+
+}
+
+.title {
+  background-color: rgb(224,224,224);
+  color : white;
+  padding : 15px ;
+}
+.votes{
+  background-color: rgb(224,224,224);
+  color : white;
+  padding : 15px ;
+}
+
+</style>
+
+{%  for post in posts.all %}
+<div>
+    <h4 class="title"><a href="{% url 'posts:postdetails' post.id %}">{{ post.title }}</a></h4>
+</div>
+<div class="relative">
+    {% if post.image %}
+    <img src="{{ post.image.url }}" class="img-responsive" style="max-height:250px;"/>
+    <br/>
+    {% endif %}
+
+    {{ post.body_summary }}
+    <br/>
+    {% if post.url %}
+    <a href="{{ post.url }}" target="_blank">{{ post.url }} </a>
+    <br/>
+    {% endif %}
+    <div class="absolute1">
+        <i class="fa fa-calendar"> {{ post.normal_date }}</i>
+        <br/>by {{ post.author.username }}
+    </div>
+    <div class="absolute2">
+
+        <form method='POST' action="{% url 'posts:upvote' post.id %}">
+            {% csrf_token %}
+            <input type="image" src="{% static 'up.png' %}" class="img-responsive" style="max-height:25px;" alt="submit">
+        </form>
+        <form method='POST' action="{% url 'posts:downvote' post.id %}">
+            {% csrf_token %}
+            <input type="image" src="{% static 'down.png' %}" class="img-responsive" style="max-height:25px;" alt="submit">
+        </form>
+    </div>
+    <div class="absolute3">{{ post.votes_total }}</div>
+</div>
+<br/>
+{% endfor %}
+
+{% endblock %}

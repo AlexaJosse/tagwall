@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load staticfiles %}
+<style>
+div.relative {
+  position : relative;
+  min-height : 120px;
+
+}
+div.absolute1 {
+  position : absolute;
+  top:2px;
+  right:0px;
+  width: 20%;
+  text-align :right;
+}
+div.absolute2 {
+  position : absolute;
+  margin-top :30px;
+  bottom : 5px;
+  right:0px;
+  width: 20%;
+  text-align :right;
+
+}
+div.absolute3 {
+  position : absolute;
+  margin-top :30px;
+  bottom : 25px;
+  right:35px;
+  width: 20%;
+  text-align :right;
+
+}
+
+.title {
+  background-color: rgb(224,224,224);
+  color : white;
+  padding : 15px ;
+}
+div.tagauthor {
+  position :relative;
+  background-color: ;
+  color : rgb(255,128,0);
+  font-size :15px;
+
+  display: inline-block;
+  padding-top:7px;
+  padding-left:10px;
+  padding-right:7px;
+  padding-bottom:0px;
+
+}
+div.tagbody {
+  position : relative;
+  background-color: ;
+  color : black;
+  font-size :22px;
+  font-style: italic;
+
+
+  display: inline-block;
+  padding-left:0px;
+  padding-right:7px;
+  padding-bottom:7px;
+
+
+}
+.votes{
+  background-color: rgb(224,224,224);
+  color : white;
+  padding : 15px ;
+}
+
+
+
+
+
+
+</style>
+
+<div>
+    <h4 class="title" style="color:black">{{ post.title }}</h4>
+</div>
+<div class="relative">
+    {% if post.image %}
+    <img src="{{ post.image.url }}" class="img-responsive" style="max-height:250px;"/>
+    <br/>
+    {% endif %}
+
+    {{ post.body_summary }}
+    <br/>
+    {% if post.url %}
+    <a href="{{ post.url }}" target="_blank">{{ post.url }} </a>
+    <br/>
+    {% endif %}
+
+    <div class="absolute1">
+        <i class="fa fa-calendar"> {{ post.normal_date }}</i>
+        <br/>by {{ post.author.username }}
+    </div>
+
+    <div class="absolute2">
+
+        <form method='POST' action="{% url 'posts:upvote' post.id %}">
+            {% csrf_token %}
+            <input type="image" src='{% static 'up.png' %}' class="img-responsive" style="max-height:25px;" alt="submit">
+        </form>
+
+        <form method='POST' action="{% url 'posts:downvote' post.id %}">
+            {% csrf_token %}
+            <input type="image" src='{% static 'down.png' %}' class="img-responsive" style="max-height:25px;" alt="submit">
+        </form>
+    </div>
+    <div class="absolute3">{{ post.votes_total }}</div>
+</div>
+
+<div>
+    <h4 class="title" style="max-width:;font-size:22px;padding:10px;color:black">{{ tagslen }} tag</h4>
+
+    <div class="tagauthor">{{ user.username }} :
+
+        <div class="tagbody">
+            <form method='POST' action="{% url 'posts:newtag' post.id %}">
+                {% csrf_token %}
+              <div class="tagbody"><input type="text" contenteditable="true" style="border-width:1px;font-style:italic;font-size :22px;"name="body"
+                       required/>
+
+                 <input class="btn btn-secondary" style="position:relative;bottom:3px;" type="submit"
+                       value="Tagger"></form></div>
+        </div>
+    </div>
+    <br/>
+    {% for tag in tags.all %}
+
+    <div class="tagauthor">{{ tag.author.username }} :
+        <div class="tagbody">{{ tag.body }}</div>
+    </div>
+    <br/>
+    {% endfor %}
+</div>
+{% endblock %}

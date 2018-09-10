@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>S'inscrire</h2>
+{% if error %}
+<div class="alert alert-danger" role="alert">
+{{ error }}<br>
+</div>
+{% endif %}
+  <form method='POST' action='{% url 'accounts:signupurl' %}'>
+  {% csrf_token %}
+    Nom d'utilisateur<br>
+    <input type='text' name='username' required/>
+    <br><br>
+    Votre mot de passe<br>
+    <input type='password' name='password1' required/>
+    <br><br>
+    Confirmer votre mot de passe<br>
+    <input type='password' name='password2' required/>
+    <br><br>
+    <input class="btn btn-secondary" type='submit' value="S'inscrire !">
+  </form>
+
+{% endblock %}

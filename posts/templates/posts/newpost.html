@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2> Nouveau Post </h2>
+
+{% if error %}
+<div class="alert alert-danger" role="alert">
+    {{ error }}<br>
+</div>
+{% endif %}
+
+<form method='POST' action="{% url 'posts:newpost' %}" enctype="multipart/form-data">
+{% csrf_token %}
+
+Titre<br>
+<input style="width:40%" type="text" name="title" required/>
+<br>
+URL<br>
+<input style="width:40%" type="text" name="url"/>
+<br><br>
+Texte<br>
+<input style="width:50%;height:300px;" type="text" name="body"/>
+<br>
+Image<br>
+<input type="file" name='image'/>
+
+<br><br>
+<input class="btn btn-secondary" type="submit" name="Poster">
+
+</form>
+{% endblock %}

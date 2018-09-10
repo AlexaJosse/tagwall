@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h2>Connexion</h2>
+{% if error %}
+<div class="alert alert-danger" role="alert">
+    {{ error }}<br>
+</div>
+{% endif %}
+<form method='POST' action='{% url 'accounts:loginurl' %}'>
+{% csrf_token %}
+
+{% if request.GET.next %}
+<input type="hidden" name='next' value={{ request.GET.next }}/>
+{% endif %}
+
+Nom d'utilisateur<br>
+<input type='text' name='username' required/>
+<br><br>
+Votre mot de passe<br>
+<input type='password' name='password' required/>
+<br><br>
+<input class="btn btn-secondary" style="background-color:rgb(255,128,0);" type='submit' value="Se connecter !">
+</form>
+
+<hr/>
+<h3>Nouveau venu ?</h3>
+<button type="button" class="btn btn-success"><a style="text-decoration:none;" href="{% url 'accounts:signupurl' %}">Inscription</a>
+</button>
+{% endblock %}
